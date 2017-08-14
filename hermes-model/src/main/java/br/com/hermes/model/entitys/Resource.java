@@ -10,20 +10,16 @@ import lombok.Data;
 
 /**
  *
- * @author Diego Dulval
+ * @author Braian
  */
 @Data
-public class User extends BaseEntity{
+public class Resource extends BaseEntity{
     
-    private String password;
-    private String type;
-    private String status;
-
-    public User(long id, String password, String type, String status) {
+    private String name;
+    
+    public Resource(Long id, String name){
         super();
         this.id = id;
-        this.password = password;
-        this.type = type;
-        this.status = status;
+        this.name = name;
     }
 }
