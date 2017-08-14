@@ -5,6 +5,7 @@
  */
 package br.com.hermes.model.base.services;
 
+import br.com.hermes.model.base.BaseCRUDService;
 import br.com.hermes.model.entitys.Divulgation;
 
 /**

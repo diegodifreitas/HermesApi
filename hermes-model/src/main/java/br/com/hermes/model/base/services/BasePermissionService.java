@@ -6,12 +6,12 @@
 package br.com.hermes.model.base.services;
 
 import br.com.hermes.model.base.BaseCRUDService;
-import br.com.hermes.model.entitys.User;
+import br.com.hermes.model.entitys.Permission;
 
 /**
  *
- * @author Diego
+ * @author Braian
  */
-public interface BaseUserService extends BaseCRUDService<User>{
+public interface BasePermissionService extends BaseCRUDService<Permission>{
     
 }
