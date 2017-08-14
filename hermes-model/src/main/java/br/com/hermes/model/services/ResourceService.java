@@ -5,9 +5,9 @@
  */
 package br.com.hermes.model.services;
 
-import br.com.hermes.model.base.services.BaseUserService;
-import br.com.hermes.model.daos.UserDAO;
-import br.com.hermes.model.entitys.User;
+import br.com.hermes.model.base.services.BaseResourceService;
+import br.com.hermes.model.daos.ResourceDAO;
+import br.com.hermes.model.entitys.Resource;
 import br.com.hermes.model.infra.ConnectionManager;
 import java.sql.Connection;
 import java.util.HashMap;
@@ -16,16 +16,16 @@ import java.util.Map;
 
 /**
  *
- * @author NPDI-04
+ * @author Braian
  */
-public class UserService implements BaseUserService {
+public class ResourceService implements BaseResourceService {
 
     @Override
-    public User create(User entity) throws Exception {
+    public Resource create(Resource entity) throws Exception {
         Connection connection = ConnectionManager.getInstance().getConnection();
         try {
-            UserDAO userDao = new UserDAO();
-            User divulgation = userDao.create(connection, entity);
+            ResourceDAO resourceDao = new ResourceDAO();
+            Resource divulgation = resourceDao.create(connection, entity);
             connection.commit();
             connection.close();
             return divulgation;
@@ -37,12 +37,12 @@ public class UserService implements BaseUserService {
     }
 
     @Override
-    public User readById(Long id) throws Exception {
+    public Resource readById(Long id) throws Exception {
         Connection connection = ConnectionManager.getInstance().getConnection();
-        User user = null;
+        Resource resource = null;
         try {
-            UserDAO userDao = new UserDAO();
-            user = userDao.readById(connection, id);
+            ResourceDAO resourceDao = new ResourceDAO();
+            resource = resourceDao.readById(connection, id);
             connection.commit();
             connection.close();
         } catch (Exception e) {
@@ -50,16 +50,16 @@ public class UserService implements BaseUserService {
             connection.close();
             throw e;
         }
-        return user;
+        return resource;
     }
 
     @Override
-    public List<User> readByCriteria(Map<Long, Object> criteria, Long limit, Long offset) throws Exception {
+    public List<Resource> readByCriteria(Map<Long, Object> criteria, Long limit, Long offset) throws Exception {
         Connection connection = ConnectionManager.getInstance().getConnection();
-        List<User> userList = null;
+        List<Resource> resourceList = null;
         try {
-            UserDAO userDao = new UserDAO();
-            userList = userDao.readByCriteria(connection, criteria, limit, offset);
+            ResourceDAO resourceDao = new ResourceDAO();
+            resourceList = resourceDao.readByCriteria(connection, criteria, limit, offset);
             connection.commit();
             connection.close();
         } catch (Exception e) {
@@ -67,7 +67,7 @@ public class UserService implements BaseUserService {
             connection.close();
             throw e;
         }
-        return userList;
+        return resourceList;
     }
 
     @Override
@@ -75,8 +75,8 @@ public class UserService implements BaseUserService {
         Connection connection = ConnectionManager.getInstance().getConnection();
         Long numberOfRegistry = 0L;
         try {
-            UserDAO userDao = new UserDAO();
-            numberOfRegistry = userDao.countByCriteria(connection, criteria);
+            ResourceDAO resourceDao = new ResourceDAO();
+            numberOfRegistry = resourceDao.countByCriteria(connection, criteria);
             connection.commit();
             connection.close();
         } catch (Exception e) {
@@ -88,11 +88,11 @@ public class UserService implements BaseUserService {
     }
 
     @Override
-    public void update(User entity) throws Exception {
+    public void update(Resource entity) throws Exception {
         Connection connection = ConnectionManager.getInstance().getConnection();
         try {
-            UserDAO userDao = new UserDAO();
-            userDao.update(connection, entity);
+            ResourceDAO resourceDao = new ResourceDAO();
+            resourceDao.update(connection, entity);
             connection.commit();
             connection.close();
         } catch (Exception e) {
@@ -106,8 +106,8 @@ public class UserService implements BaseUserService {
     public void delete(Long id) throws Exception {
         Connection connection = ConnectionManager.getInstance().getConnection();
         try {
-            UserDAO userDao = new UserDAO();
-            userDao.delete(connection, id);
+            ResourceDAO resourceDao = new ResourceDAO();
+            resourceDao.delete(connection, id);
             connection.commit();
             connection.close();
         } catch (Exception e) {
@@ -121,22 +121,13 @@ public class UserService implements BaseUserService {
     public Map<String, String> validate(Map<String, Object> fields) throws Exception {
         Map<String, String> errors = new HashMap<>();
 
-        String password = (String) fields.get("password");
-        String type = (String) fields.get("type");
-        String status = (String) fields.get("status");
+        String name = (String) fields.get("name");
 
-        if (password == null || password.trim().isEmpty()) {
-            errors.put("password", "Campo senha é obrigatório!");
-        }
-        
-        if (type == null || type.trim().isEmpty()) {
-            errors.put("type", "Este Campo é obrigatório!");
-        }
-        
-        if (status == null || status.trim().isEmpty()) {
-            errors.put("status", "Este Campo é obrigatório!");
+        if (name == null || name.trim().isEmpty()) {
+            errors.put("name", "Campo nome é obrigatório!");
         }
         
         return errors;
     }
+
 }

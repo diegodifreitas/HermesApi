@@ -5,9 +5,9 @@
  */
 package br.com.hermes.model.services;
 
-import br.com.hermes.model.base.services.BaseUserService;
-import br.com.hermes.model.daos.UserDAO;
-import br.com.hermes.model.entitys.User;
+import br.com.hermes.model.base.services.BaseOSCService;
+import br.com.hermes.model.daos.OSCDAO;
+import br.com.hermes.model.entitys.OSC;
 import br.com.hermes.model.infra.ConnectionManager;
 import java.sql.Connection;
 import java.util.HashMap;
@@ -16,16 +16,16 @@ import java.util.Map;
 
 /**
  *
- * @author NPDI-04
+ * @author Braian
  */
-public class UserService implements BaseUserService {
-
+public class OSCService implements BaseOSCService{
+    
     @Override
-    public User create(User entity) throws Exception {
+    public OSC create(OSC entity) throws Exception {
         Connection connection = ConnectionManager.getInstance().getConnection();
         try {
-            UserDAO userDao = new UserDAO();
-            User divulgation = userDao.create(connection, entity);
+            OSCDAO oscDao = new OSCDAO();
+            OSC divulgation = oscDao.create(connection, entity);
             connection.commit();
             connection.close();
             return divulgation;
@@ -37,12 +37,12 @@ public class UserService implements BaseUserService {
     }
 
     @Override
-    public User readById(Long id) throws Exception {
+    public OSC readById(Long id) throws Exception {
         Connection connection = ConnectionManager.getInstance().getConnection();
-        User user = null;
+        OSC osc = null;
         try {
-            UserDAO userDao = new UserDAO();
-            user = userDao.readById(connection, id);
+            OSCDAO oscDao = new OSCDAO();
+            osc = oscDao.readById(connection, id);
             connection.commit();
             connection.close();
         } catch (Exception e) {
@@ -50,16 +50,16 @@ public class UserService implements BaseUserService {
             connection.close();
             throw e;
         }
-        return user;
+        return osc;
     }
 
     @Override
-    public List<User> readByCriteria(Map<Long, Object> criteria, Long limit, Long offset) throws Exception {
+    public List<OSC> readByCriteria(Map<Long, Object> criteria, Long limit, Long offset) throws Exception {
         Connection connection = ConnectionManager.getInstance().getConnection();
-        List<User> userList = null;
+        List<OSC> oscList = null;
         try {
-            UserDAO userDao = new UserDAO();
-            userList = userDao.readByCriteria(connection, criteria, limit, offset);
+            OSCDAO oscDao = new OSCDAO();
+            oscList = oscDao.readByCriteria(connection, criteria, limit, offset);
             connection.commit();
             connection.close();
         } catch (Exception e) {
@@ -67,7 +67,7 @@ public class UserService implements BaseUserService {
             connection.close();
             throw e;
         }
-        return userList;
+        return oscList;
     }
 
     @Override
@@ -75,8 +75,8 @@ public class UserService implements BaseUserService {
         Connection connection = ConnectionManager.getInstance().getConnection();
         Long numberOfRegistry = 0L;
         try {
-            UserDAO userDao = new UserDAO();
-            numberOfRegistry = userDao.countByCriteria(connection, criteria);
+            OSCDAO oscDao = new OSCDAO();
+            numberOfRegistry = oscDao.countByCriteria(connection, criteria);
             connection.commit();
             connection.close();
         } catch (Exception e) {
@@ -88,11 +88,11 @@ public class UserService implements BaseUserService {
     }
 
     @Override
-    public void update(User entity) throws Exception {
+    public void update(OSC entity) throws Exception {
         Connection connection = ConnectionManager.getInstance().getConnection();
         try {
-            UserDAO userDao = new UserDAO();
-            userDao.update(connection, entity);
+            OSCDAO oscDao = new OSCDAO();
+            oscDao.update(connection, entity);
             connection.commit();
             connection.close();
         } catch (Exception e) {
@@ -106,8 +106,8 @@ public class UserService implements BaseUserService {
     public void delete(Long id) throws Exception {
         Connection connection = ConnectionManager.getInstance().getConnection();
         try {
-            UserDAO userDao = new UserDAO();
-            userDao.delete(connection, id);
+            OSCDAO oscDao = new OSCDAO();
+            oscDao.delete(connection, id);
             connection.commit();
             connection.close();
         } catch (Exception e) {
@@ -121,16 +121,46 @@ public class UserService implements BaseUserService {
     public Map<String, String> validate(Map<String, Object> fields) throws Exception {
         Map<String, String> errors = new HashMap<>();
 
-        String password = (String) fields.get("password");
-        String type = (String) fields.get("type");
+        String name = (String) fields.get("name");
+        String email = (String) fields.get("email");
+        String cnpj = (String) fields.get("cnpj");
+        String phone = (String) fields.get("phone");
+        String street = (String) fields.get("street");
+        String neighborhood = (String) fields.get("neighborhood");
+        String city = (String) fields.get("city");
+        Boolean valid = (Boolean) fields.get("valid");
         String status = (String) fields.get("status");
 
-        if (password == null || password.trim().isEmpty()) {
-            errors.put("password", "Campo senha é obrigatório!");
+        if (name == null || name.trim().isEmpty()) {
+            errors.put("name", "Campo nome é obrigatório!");
         }
         
-        if (type == null || type.trim().isEmpty()) {
-            errors.put("type", "Este Campo é obrigatório!");
+        if (email == null || email.trim().isEmpty()) {
+            errors.put("email", "Este Campo é obrigatório!");
+        }
+        
+        if (cnpj == null || cnpj.trim().isEmpty()) {
+            errors.put("cnpj", "Campo nome é obrigatório!");
+        }
+        
+        if (phone == null || phone.trim().isEmpty()) {
+            errors.put("phone", "Este Campo é obrigatório!");
+        }
+        
+        if (street == null || street.trim().isEmpty()) {
+            errors.put("street", "Campo nome é obrigatório!");
+        }
+        
+        if (neighborhood == null || neighborhood.trim().isEmpty()) {
+            errors.put("neighborhood", "Campo nome é obrigatório!");
+        }
+        
+        if (city == null || city.trim().isEmpty()) {
+            errors.put("city", "Este Campo é obrigatório!");
+        }
+        
+        if (valid == null) {
+            errors.put("valid", "Este Campo é obrigatório!");
         }
         
         if (status == null || status.trim().isEmpty()) {

@@ -5,27 +5,28 @@
  */
 package br.com.hermes.model.services;
 
-import br.com.hermes.model.base.services.BaseUserService;
-import br.com.hermes.model.daos.UserDAO;
-import br.com.hermes.model.entitys.User;
+import br.com.hermes.model.base.services.BasePermissionService;
+import br.com.hermes.model.daos.PermissionDAO;
+import br.com.hermes.model.entitys.Permission;
 import br.com.hermes.model.infra.ConnectionManager;
 import java.sql.Connection;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  *
- * @author NPDI-04
+ * @author Braian
  */
-public class UserService implements BaseUserService {
-
+public class PermissionService implements BasePermissionService {
+    
     @Override
-    public User create(User entity) throws Exception {
+    public Permission create(Permission entity) throws Exception {
         Connection connection = ConnectionManager.getInstance().getConnection();
         try {
-            UserDAO userDao = new UserDAO();
-            User divulgation = userDao.create(connection, entity);
+            PermissionDAO permissionDao = new PermissionDAO();
+            Permission divulgation = permissionDao.create(connection, entity);
             connection.commit();
             connection.close();
             return divulgation;
@@ -37,12 +38,12 @@ public class UserService implements BaseUserService {
     }
 
     @Override
-    public User readById(Long id) throws Exception {
+    public Permission readById(Long id) throws Exception {
         Connection connection = ConnectionManager.getInstance().getConnection();
-        User user = null;
+        Permission permission = null;
         try {
-            UserDAO userDao = new UserDAO();
-            user = userDao.readById(connection, id);
+            PermissionDAO permissionDao = new PermissionDAO();
+            permission = permissionDao.readById(connection, id);
             connection.commit();
             connection.close();
         } catch (Exception e) {
@@ -50,16 +51,16 @@ public class UserService implements BaseUserService {
             connection.close();
             throw e;
         }
-        return user;
+        return permission;
     }
 
     @Override
-    public List<User> readByCriteria(Map<Long, Object> criteria, Long limit, Long offset) throws Exception {
+    public List<Permission> readByCriteria(Map<Long, Object> criteria, Long limit, Long offset) throws Exception {
         Connection connection = ConnectionManager.getInstance().getConnection();
-        List<User> userList = null;
+        List<Permission> permissionList = null;
         try {
-            UserDAO userDao = new UserDAO();
-            userList = userDao.readByCriteria(connection, criteria, limit, offset);
+            PermissionDAO permissionDao = new PermissionDAO();
+            permissionList = permissionDao.readByCriteria(connection, criteria, limit, offset);
             connection.commit();
             connection.close();
         } catch (Exception e) {
@@ -67,7 +68,7 @@ public class UserService implements BaseUserService {
             connection.close();
             throw e;
         }
-        return userList;
+        return permissionList;
     }
 
     @Override
@@ -75,8 +76,8 @@ public class UserService implements BaseUserService {
         Connection connection = ConnectionManager.getInstance().getConnection();
         Long numberOfRegistry = 0L;
         try {
-            UserDAO userDao = new UserDAO();
-            numberOfRegistry = userDao.countByCriteria(connection, criteria);
+            PermissionDAO permissionDao = new PermissionDAO();
+            numberOfRegistry = permissionDao.countByCriteria(connection, criteria);
             connection.commit();
             connection.close();
         } catch (Exception e) {
@@ -88,11 +89,11 @@ public class UserService implements BaseUserService {
     }
 
     @Override
-    public void update(User entity) throws Exception {
+    public void update(Permission entity) throws Exception {
         Connection connection = ConnectionManager.getInstance().getConnection();
         try {
-            UserDAO userDao = new UserDAO();
-            userDao.update(connection, entity);
+            PermissionDAO permissionDao = new PermissionDAO();
+            permissionDao.update(connection, entity);
             connection.commit();
             connection.close();
         } catch (Exception e) {
@@ -106,8 +107,8 @@ public class UserService implements BaseUserService {
     public void delete(Long id) throws Exception {
         Connection connection = ConnectionManager.getInstance().getConnection();
         try {
-            UserDAO userDao = new UserDAO();
-            userDao.delete(connection, id);
+            PermissionDAO permissionDao = new PermissionDAO();
+            permissionDao.delete(connection, id);
             connection.commit();
             connection.close();
         } catch (Exception e) {
@@ -121,20 +122,21 @@ public class UserService implements BaseUserService {
     public Map<String, String> validate(Map<String, Object> fields) throws Exception {
         Map<String, String> errors = new HashMap<>();
 
-        String password = (String) fields.get("password");
-        String type = (String) fields.get("type");
-        String status = (String) fields.get("status");
+        Long user = (Long) fields.get("user");
+        Long resource = (Long) fields.get("resource");
+        Timestamp date = (Timestamp) fields.get("date");
+        Long privilege = (Long) fields.get("privilege");
 
-        if (password == null || password.trim().isEmpty()) {
-            errors.put("password", "Campo senha é obrigatório!");
+        if (user == null || user <= 0) {
+            errors.put("user", "Este Campo é obrigatório!");
         }
         
-        if (type == null || type.trim().isEmpty()) {
-            errors.put("type", "Este Campo é obrigatório!");
+        if (resource == null || resource <= 0) {
+            errors.put("resource", "Este Campo é obrigatório!");
         }
         
-        if (status == null || status.trim().isEmpty()) {
-            errors.put("status", "Este Campo é obrigatório!");
+        if (privilege == null || privilege <= 0) {
+            errors.put("privilege", "Este Campo é obrigatório!");
         }
         
         return errors;
