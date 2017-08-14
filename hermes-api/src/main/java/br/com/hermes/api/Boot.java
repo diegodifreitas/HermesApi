@@ -57,8 +57,8 @@ public class Boot extends SpringBootServletInitializer {
     @Autowired
     public void authenticationManager(AuthenticationManagerBuilder builder, UserService service) throws Exception {
         //To-do : setar um usuario default para cao do banco estar vazio
-        UserDetailsService user = userDetailsService(service);
-        builder.userDetailsService(user);
+       // UserDetailsService user = userDetailsService(service);
+       // builder.userDetailsService(user);
         //.passwordEncoder(passwordEncoder);
     }
 
@@ -68,7 +68,7 @@ public class Boot extends SpringBootServletInitializer {
      * @param service
      * @return
      */
-    private UserDetailsService userDetailsService(final UserService service) {
+  /*  private UserDetailsService userDetailsService(final UserService service) {
         return username -> {
             try {
                 Map<Long, Object> criteria = new HashMap<>();
@@ -84,5 +84,5 @@ public class Boot extends SpringBootServletInitializer {
                 return null;
             }
         };
-    }
+    }*/
 }

@@ -50,7 +50,7 @@ public class Swagger2Configuration {
     }
 
     private Predicate<String> paths() {
-        return or(regex("/divulgation/.*"));
+        return or(regex("/publicAdmin/.*"));
     }
 
     private ApiInfo apiInfo() {

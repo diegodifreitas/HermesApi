@@ -6,6 +6,7 @@
 package br.com.hermes.api.configurations;
 
 import br.com.hermes.model.services.DivulgationService;
+import br.com.hermes.model.services.PublicAdministrationService;
 import br.com.hermes.model.services.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,11 @@ public class ServiceLocator {
     @Bean
     public UserService userService() {
         return new UserService();
+    }
+
+    @Bean
+    public PublicAdministrationService públicAdministrationService() {
+        return new PublicAdministrationService();
     }
 
     @Bean
