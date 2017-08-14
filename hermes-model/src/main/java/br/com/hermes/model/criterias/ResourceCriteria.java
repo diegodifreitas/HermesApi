@@ -7,8 +7,10 @@ package br.com.hermes.model.criterias;
 
 /**
  *
- * @author NPDI-04
+ * @author Braian
  */
-public class UserCriteria {
-    public static Long TYPE_EQ = 1L;
+public class ResourceCriteria {
+    
+    public static Long NAME_EQ = 1L;
+    public static Long NAME_ILIKE = 2L;
 }
