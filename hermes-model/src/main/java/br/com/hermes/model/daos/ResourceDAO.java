@@ -6,8 +6,8 @@
 package br.com.hermes.model.daos;
 
 import br.com.hermes.model.base.BaseDAO;
-import br.com.hermes.model.criterias.UserCriteria;
-import br.com.hermes.model.entitys.User;
+import br.com.hermes.model.criterias.ResourceCriteria;
+import br.com.hermes.model.entitys.Resource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,28 +18,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Classe de implementação dos métodos da interface BaseDAO responsavél pela
- * persistência da entidade de User.
  *
- * @author Diego Dulval
- * @version 1.0
- * @since Release 01
- *
+ * @author Braian
  */
-public class UserDAO implements BaseDAO<User> {
+public class ResourceDAO implements BaseDAO<Resource> {
 
     @Override
-    public User create(Connection connection, User entity) throws Exception {
+    public Resource create(Connection connection, Resource entity) throws Exception {
         String sql
-                = "INSERT INTO user "
-                + "(password, type, status) "
-                + "VALUES (?, ?, ?) RETURNING id;";
+                = "INSERT INTO resource "
+                + "(name) "
+                + "VALUES (?) RETURNING id;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             int indexQueryParameter = 0;
 
-            preparedStatement.setString(++indexQueryParameter, entity.getPassword());
-            preparedStatement.setString(++indexQueryParameter, entity.getType());
-            preparedStatement.setString(++indexQueryParameter, entity.getStatus());
+            preparedStatement.setString(++indexQueryParameter, entity.getName());
 
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -54,42 +47,39 @@ public class UserDAO implements BaseDAO<User> {
     }
 
     @Override
-    public User readById(Connection connection, Long id) throws Exception {
-        
+    public Resource readById(Connection connection, Long id) throws Exception {
         String sql
-                = "SELECT * FROM user "
+                = "SELECT * FROM resource "
                 + "WHERE id=?";
 
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setLong(1, id);
         ResultSet resultSet = ps.executeQuery();
 
-        User user = null;
+        Resource resource = null;
         while (resultSet.next()) {
-            user = new User(resultSet.getLong("id"),
-                            resultSet.getString("password"),
-                            resultSet.getString("type"),
-                            resultSet.getString("status"));
+            resource = new Resource(resultSet.getLong("id"),
+                            resultSet.getString("name"));
         }
 
         resultSet.close();
         ps.close();
 
-        return user;
+        return resource;
     }
 
     @Override
-    public List<User> readByCriteria(Connection connection, Map<Long, Object> criteria, Long limit, Long offset) throws Exception {
-        List<User> userList = new ArrayList<>();
+    public List<Resource> readByCriteria(Connection connection, Map<Long, Object> criteria, Long limit, Long offset) throws Exception {
+        List<Resource> resourceList = new ArrayList<>();
         String sql
-                = "SELECT * FROM user "
+                = "SELECT * FROM resource "
                 + "WHERE 1=1";
 
         if (criteria != null) {
             sql += applyCriteria(criteria);
         }
 
-        sql += " ORDER BY type";
+        sql += " ORDER BY name";
 
         if (limit != null && limit > 0) {
             sql += " LIMIT " + limit;
@@ -102,18 +92,18 @@ public class UserDAO implements BaseDAO<User> {
         ResultSet resultSet = statement.executeQuery(sql);
 
         while (resultSet.next()) {
-            userList.add(parser(resultSet));
+            resourceList.add(parser(resultSet));
         }
 
         resultSet.close();
         statement.close();
 
-        return userList;
+        return resourceList;
     }
 
     @Override
     public Long countByCriteria(Connection connection, Map<Long, Object> criteria) throws Exception {
-        String sql = "SELECT count(*) count FROM user u WHERE 1=1 ";
+        String sql = "SELECT count(*) count FROM resource a WHERE 1=1 ";
         if (criteria != null) {
             sql += applyCriteria(criteria);
         }
@@ -130,13 +120,11 @@ public class UserDAO implements BaseDAO<User> {
     }
 
     @Override
-    public void update(Connection connection, User entity) throws Exception {
-        String sql = "UPDATE user SET password=?, type=?, status=? WHERE id=?;";
+    public void update(Connection connection, Resource entity) throws Exception {
+        String sql = "UPDATE resource SET name=? WHERE id=?;";
         PreparedStatement ps = connection.prepareStatement(sql);
         int i = 0;
-        ps.setString(++i, entity.getPassword());
-        ps.setString(++i, entity.getType());
-        ps.setString(++i, entity.getStatus());
+        ps.setString(++i, entity.getName());
         ps.setLong(++i, entity.getId());
         ps.execute();
         ps.close();
@@ -144,7 +132,7 @@ public class UserDAO implements BaseDAO<User> {
 
     @Override
     public void delete(Connection connection, Long id) throws Exception {
-        String sql = "DELETE FROM user WHERE id=?;";
+        String sql = "DELETE FROM resource WHERE id=?;";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setLong(1, id);
         preparedStatement.execute();
@@ -155,23 +143,26 @@ public class UserDAO implements BaseDAO<User> {
     public String applyCriteria(Map<Long, Object> criteria) {
         String sql = "";
 
-        String infoTypeEQ = (String) criteria.get(UserCriteria.TYPE_EQ);
-        if (infoTypeEQ != null) {
-            sql += " AND type ='" + infoTypeEQ + "'";
+        String infoNameEQ = (String) criteria.get(ResourceCriteria.NAME_EQ);
+        if (infoNameEQ != null) {
+            sql += " AND name ='" + infoNameEQ + "'";
+        }
+        
+        String infoNameILIKE = (String) criteria.get(ResourceCriteria.NAME_ILIKE);
+        if (infoNameILIKE != null) {
+            sql += " AND name ILIKE '%" + infoNameILIKE + "'";
         }
 
         return sql;
     }
 
     @Override
-    public User parser(ResultSet resultSet) throws SQLException {
-        User user = new User(
+    public Resource parser(ResultSet resultSet) throws SQLException {
+        Resource resource = new Resource(
                 resultSet.getLong("id"),
-                resultSet.getString("password"),
-                resultSet.getString("type"),
-                resultSet.getString("status")
+                resultSet.getString("name")
         );
-        return user;
+        return resource;
     }
-
+    
 }
