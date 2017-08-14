@@ -19,9 +19,9 @@ public class CustomUserDetails implements UserDetails {
     private String username;
 
     public CustomUserDetails(User user) {
-        this.username = user.getName();
-        this.password = user.getPassword();
-        this.authorities = translate("USER");
+     //   this.username = user.getName();
+      //  this.password = user.getPassword();
+       // this.authorities = translate("USER");
 
 //        if (usuario instanceof Administrador) {
 //            this.authorities = translate("ADMIN");

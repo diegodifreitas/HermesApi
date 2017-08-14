@@ -19,7 +19,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http.headers().frameOptions().disable().and()
                 .authorizeRequests()
                 .antMatchers("/","/home","/register","/login", "/resources/**", "/v2/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/divulgation/**").permitAll()
+                //.antMatchers(HttpMethod.GET, "/divulgation/**").permitAll()
+                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated();
     }
 
