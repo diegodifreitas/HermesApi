@@ -22,7 +22,7 @@ public class DivulgationForm {
     private String title;
     @NotBlank
     private String description;
-    @NotBlank(message = "tipo obrigatorio")
+    @NotBlank(message = "campo type obrigatorio")
     private String type;
 
     public Divulgation build() {
