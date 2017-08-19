@@ -1,6 +1,7 @@
 # Hermes API
 
-Sistema de software para gestão de parcerias entre a administração pública e as organizações da sociedade civil Edit
+Sistema de software para gestão de parcerias entre a administração pública e as organizações da sociedade civil
+- Work in process
 
 ## Getting Started
 
